@@ -39,10 +39,29 @@ def L(X, y, W, delta=1.0):
   return L_i
   
   
+def softmax_function(f):
+  f = f - np.max(f)
+  f_exp = np.exp(f)
+  sum_f = np.sum(f_exp)
+  return f_exp / sum_f
 
-  
+
+def softmax_function_batch(F):
+  '''
+  F is now shape [N x C]
+  '''
+  F = F - np.max(F, axis = 1, keepdims=True)
+  F_exp = np.exp(F)
+  sum_F = np.sum(F_exp, axis=1, keepdims=True)
+  return F_exp / sum_F  
     
 
+def CrossEntropyLoss(F, y):
+  F = F - np.max(F, axis = 1, keepdims=True)
+  correct_class_score = F[np.arange(F.shape[0]), y]
+  log_sum_other = np.log(np.sum(np.exp(F), axis=1, keepdims=True))
+  print(correct_class_score[:, np.newaxis] - log_sum_other)
+  return (-1 / F.shape[0]) * np.sum(correct_class_score[:, np.newaxis] - log_sum_other) 
 
 def score_calc(x_i, num_of_class = 10):
   '''
@@ -53,5 +72,11 @@ def score_calc(x_i, num_of_class = 10):
   print(W.shape)
   return x_i.T @ W 
   
-s = np.array([13, -7, 11])
-print(loss_SVM(10, s, 0))
+def test():
+  F = np.array([[2.0, 1.0, 0.1],
+                [1.0, 2.0, 3.0]])
+  y = np.array([0, 1])
+  print(CrossEntropyLoss(F,y))
+
+if __name__ == '__main__':
+  test()
