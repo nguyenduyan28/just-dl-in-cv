@@ -30,6 +30,8 @@ def cifar10_get_labels():
 
 
 
+
+
 def reformat_arr(img_arr):
   r = img_arr[: , : 1024].reshape(-1, 1)
   g = img_arr[:, 1024 : 1024 * 2].reshape(-1, 1)
@@ -77,14 +79,3 @@ def show_img(img_arr, label_arr):
   plt.title(label_name)
   plt.imshow(img_arr_normalized) 
   plt.show()
-
-
-
-
-
-
-if __name__ == '__main__':
-  X_train, y_train, X_val, y_val, X_test, y_test = load_cifar10(val_split=True)
-  print(X_train.shape)
-
-  show_img(X_val[0], y_val[0])
