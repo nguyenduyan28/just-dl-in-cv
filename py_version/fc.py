@@ -57,6 +57,32 @@ def softmax_function_batch(F):
     
 
 def CrossEntropyLoss(F, y):
+  """
+  Computes the average cross-entropy loss over a batch of examples.
+
+  Parameters:
+  -----------
+  F : np.ndarray, shape (N, C)
+    The raw score (logit) matrix where N is the number of examples
+    and C is the number of classes. Each row corresponds to the unnormalized
+    class scores for a single input example.
+      
+  y : np.ndarray, shape (N,)
+    Ground truth labels for each example in the batch. Each entry is an integer
+    representing the correct class index (0 <= y[i] < C).
+
+  Returns:
+  --------
+  float
+    The average cross-entropy loss over the batch.
+
+  Notes:
+  ------
+  - Applies the numerical stability trick by shifting logits before computing softmax.
+  - The loss is computed as:
+    L_i = -f_{y_i} + log(sum_j exp(f_j))
+  - The final returned loss is the average across all examples.
+  """
   F = F - np.max(F, axis = 1, keepdims=True)
   correct_class_score = F[np.arange(F.shape[0]), y]
   log_sum_other = np.log(np.sum(np.exp(F), axis=1, keepdims=True))
@@ -73,10 +99,9 @@ def score_calc(x_i, num_of_class = 10):
   return x_i.T @ W 
   
 def test():
-  F = np.array([[2.0, 1.0, 0.1],
-                [1.0, 2.0, 3.0]])
-  y = np.array([0, 1])
-  print(CrossEntropyLoss(F,y))
+  F = np.array([10, 9, 9]),
+  y = 0
+  print(loss_SVM(1.0 , F, y))
 
 if __name__ == '__main__':
   test()
